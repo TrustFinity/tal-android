@@ -1,0 +1,18 @@
+<resources>
+    <string name="facebook_app_id">1639391189464946</string>
+    <string name="fb_login_protocol_scheme">fb1639391189464946</string>
+
+    <string name="app_name">TAL - Surveys</string>
+    <string name="title_activity_home">TAL - Surveys</string>
+    <string name="title_all">All</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_surveys">Surveys</string>
+    <string name="all_frame_words">Complete your profile to get more \n exciting insights and activities</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="large_text">
+        Complete your profile to get more surveys tailored for you. More rewards.
+    </string>
+    <string name="action_settings">Settings</string>
+</resources>

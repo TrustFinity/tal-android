@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context="pro.ambrose.www.tal_surveys.EditProfile">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="First Name"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
+            <EditText
+                android:id="@+id/first_name"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/text_field_bg"/>
+            <TextView
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Middle Name (if any)"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
+            <EditText
+                android:id="@+id/middle_name"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/text_field_bg"/>
+            <TextView
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Last Name"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
+            <EditText
+                android:id="@+id/last_name"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/text_field_bg"/>
+            <TextView
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Phone Number"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
+            <EditText
+                android:id="@+id/phone_number"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="+256793270999"
+                android:ems="10"
+                android:inputType="phone"
+                android:background="@drawable/text_field_bg"/>
+            <TextView
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Age"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
+            <EditText
+                android:id="@+id/age"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:ems="10"
+                android:inputType="number"
+                android:background="@drawable/text_field_bg"/>
+            <TextView
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Occupation"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
+            <EditText
+                android:id="@+id/occupation"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/text_field_bg"/>
+            <TextView
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="City"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
+            <EditText
+                android:id="@+id/city"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/text_field_bg"/>
+            <TextView
+                android:layout_marginTop="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Country"
+                android:textAppearance="@style/TextAppearance.AppCompat" />
+            <EditText
+                android:id="@+id/country"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/text_field_bg"/>
+
+            <Button
+                android:id="@+id/update_info"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:text="Update Information"
+                style="@android:style/Widget.Button"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
