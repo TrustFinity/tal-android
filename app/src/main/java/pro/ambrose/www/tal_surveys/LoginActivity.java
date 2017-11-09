@@ -1,10 +1,14 @@
 package pro.ambrose.www.tal_surveys;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,6 +21,9 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -68,6 +75,22 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "facebook:onError", error);
             }
         });
+
+        // Generate key hashes for facebook.
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "pro.ambrose.www.tal_surveys",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
     }
 
     @Override
@@ -78,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void saveUserDataOnline(AccessToken accessToken) {
         profile = Profile.getCurrentProfile();
-        access_token = accessToken.toString();
+        access_token = accessToken.getUserId();
         new PostUserData(create_user_url).execute();
     }
 
@@ -104,6 +127,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
+            Log.d(TAG, access_token);
             RequestBody body = new FormBody.Builder()
                     .add("facebook_id", access_token)
                     .add("firstname", profile.getFirstName())
