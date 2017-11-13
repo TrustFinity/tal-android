@@ -29,11 +29,31 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
-            <ImageView
-                android:id="@+id/profile_image"
-                android:scaleType="centerCrop"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/profile_image"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    app:civ_border_color="#FF000000"
+                    app:civ_border_width="2dp"
+                    app:srcCompat="@drawable/ic_dashboard_black_24dp" />
+
+                <TextView
+                    android:id="@+id/names"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Mwaka Ambrose"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

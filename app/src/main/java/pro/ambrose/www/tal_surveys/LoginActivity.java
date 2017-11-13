@@ -130,9 +130,9 @@ public class LoginActivity extends AppCompatActivity {
             Log.d(TAG, access_token);
             RequestBody body = new FormBody.Builder()
                     .add("facebook_id", access_token)
-                    .add("firstname", profile.getFirstName())
+                    .add("first_name", profile.getFirstName())
                     .add("middle_name", profile.getMiddleName())
-                    .add("lastname", profile.getLastName())
+                    .add("last_name", profile.getLastName())
                     .add("image_url", profile.getProfilePictureUri(500, 500).toString())
                     .build();
             Request request = new Request.Builder()

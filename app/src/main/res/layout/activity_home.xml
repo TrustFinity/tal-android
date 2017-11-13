@@ -9,9 +9,9 @@
     tools:context="pro.ambrose.www.tal_surveys.Home">
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        android:elevation="5dp"
-        android:layout_height="wrap_content">
+        android:elevation="5dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -19,23 +19,23 @@
                 android:id="@+id/message"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:fontFamily="sans-serif"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:layout_weight="2"
+                android:fontFamily="sans-serif"
+                android:text="Tal Surveys"
                 android:textColor="@android:color/white"
-                android:text="Tal Surveys"/>
+                android:textSize="16sp"
+                android:textStyle="bold" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="$0.00"
-                android:textAlignment="gravity"
-                android:gravity="right"
-                android:fontFamily="sans-serif"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:layout_marginRight="16dp"
-                android:textColor="@android:color/white"/>
+                android:fontFamily="sans-serif"
+                android:gravity="right"
+                android:text="0.00"
+                android:textAlignment="gravity"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
@@ -49,15 +49,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout
+                android:id="@+id/main_swipe"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/main_swipe"
                 app:theme="@style/AppTheme">
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/surveys_recycler_views"
-                    android:scrollbars="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical" />
             </jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout>
         </RelativeLayout>
     </FrameLayout>

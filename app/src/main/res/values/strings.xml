@@ -11,8 +11,9 @@
     <string name="title_surveys">Surveys</string>
     <string name="all_frame_words">Complete your profile to get more \n exciting insights and activities</string>
     <string name="title_activity_profile">Profile</string>
-    <string name="large_text">
-        Complete your profile to get more surveys tailored for you. More rewards.
-    </string>
     <string name="action_settings">Settings</string>
+    <string name="profile_info">
+        Complete your profile to get more surveys tailored for you. More rewards.
+        The fewer empty values you have, the higher the chances of getting more surveys.
+    </string>
 </resources>
