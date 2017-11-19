@@ -6,15 +6,25 @@ package DataModels;
 
 public class QuestionAnswerModel {
     private int surveyId;
+    private int questionId;
     private String questionType;
     private String question;
     private String[] responses;
 
-    public QuestionAnswerModel(int surveyId, String questionType, String question, String[] responses) {
+    public QuestionAnswerModel(int surveyId, int questionId, String questionType, String question, String[] responses) {
         this.surveyId = surveyId;
+        this.questionId = questionId;
         this.questionType = questionType;
         this.question = question;
         this.responses = responses;
+    }
+
+    public int getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(int questionId) {
+        this.questionId = questionId;
     }
 
     public int getSurveyId() {

@@ -31,13 +31,12 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".OnboardingActivity"></activity>
         <activity android:name=".LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".Home"
@@ -60,9 +59,15 @@
             android:label="Respond To Survey"
             android:parentActivityName=".NewSurveys" />
         <activity
-            android:label="Edit Profile"
             android:name=".EditProfile"
-            android:parentActivityName=".RespondentProfile">
+            android:label="Edit Profile"
+            android:parentActivityName=".RespondentProfile"></activity>
+        <activity android:name=".Onboarding">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

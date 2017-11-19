@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_marginBottom="5dp"
     android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/question"
@@ -23,15 +23,5 @@
             android:checkedButton="@+id/sound">
                 <!--Auto populated radio buttons for answers-->
         </RadioGroup>
-
-        <Button
-            android:id="@+id/send_answer"
-            style="@style/Widget.AppCompat.Button.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/myRadioGroup"
-            android:layout_marginTop="10dp"
-            android:text="Submit Answer"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
     </RelativeLayout>
 </LinearLayout>
