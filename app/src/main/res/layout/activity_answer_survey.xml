@@ -10,18 +10,27 @@
     <ListView
         android:id="@+id/questions_answers"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:scrollbars="none" />
 
-    <Button
-        android:id="@+id/submit_response"
+    <TextView
+        android:id="@+id/success_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
         android:elevation="5dp"
         android:shadowRadius="4.7"
-        android:text="Submit response"
-        android:textColor="@android:color/white" />
+        android:text="Survey Complete. Thank you for taking your time to answer."
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/go_back_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/success_message"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="Go Back" />
 </RelativeLayout>

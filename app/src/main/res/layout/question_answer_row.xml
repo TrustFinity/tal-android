@@ -24,4 +24,10 @@
                 <!--Auto populated radio buttons for answers-->
         </RadioGroup>
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/send_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit Answer" />
 </LinearLayout>

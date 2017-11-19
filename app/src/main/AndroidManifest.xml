@@ -57,7 +57,9 @@
         <activity
             android:name=".AnswerSurvey"
             android:label="Respond To Survey"
-            android:parentActivityName=".NewSurveys" />
+            android:parentActivityName=".NewSurveys"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".EditProfile"
             android:label="Edit Profile"

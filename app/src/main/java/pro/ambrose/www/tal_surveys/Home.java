@@ -33,18 +33,37 @@ import okhttp3.Response;
 public class Home extends AppCompatActivity {
 
     private static final String TAG = "Home";
-    private TextView mTextMessage;
-    private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
-    public boolean isConnected = false;
     public final String ALL_SURVEYS_URL = "http://tal-surveys.herokuapp.com/api/v1/all-surveys";
     public final String USER_SURVEYS_URL = "http://tal-surveys.herokuapp.com/api/v1/all-surveys";
-
+    public boolean isConnected = false;
+    ArrayList<SurveyModel> surveys;
+    private TextView mTextMessage;
+    private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-    ArrayList<SurveyModel> surveys;
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_all:
+                    mTextMessage.setText(R.string.title_all);
+                    return true;
+                case R.id.navigation_surveys:
+                    startActivity(new Intent(getApplicationContext(), NewSurveys.class));
+                    mTextMessage.setText(R.string.title_surveys);
+                    return true;
+                case R.id.navigation_profile:
+                    startActivity(new Intent(getApplicationContext(), RespondentProfile.class));
+                    mTextMessage.setText(R.string.title_profile);
+                    return true;
+            }
+            return false;
+        }
 
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,29 +105,6 @@ public class Home extends AppCompatActivity {
         new RequestRawJSON(ALL_SURVEYS_URL).execute();
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_all:
-                    mTextMessage.setText(R.string.title_all);
-                    return true;
-                case R.id.navigation_surveys:
-                    startActivity(new Intent(getApplicationContext(), NewSurveys.class));
-                    mTextMessage.setText(R.string.title_surveys);
-                    return true;
-                case R.id.navigation_profile:
-                    startActivity(new Intent(getApplicationContext(), RespondentProfile.class));
-                    mTextMessage.setText(R.string.title_profile);
-                    return true;
-            }
-            return false;
-        }
-
-    };
-
     public boolean monitorConnectivity(){
         ReactiveNetwork.observeInternetConnectivity()
             .subscribeOn(Schedulers.io())
@@ -123,6 +119,8 @@ public class Home extends AppCompatActivity {
     }
 
     public void updateUI(String rawJSON) throws JSONException {
+        // Null pointer exception thrown here in the below line coz of no
+        // internet connection.
         JSONArray array = new JSONArray(rawJSON);
         surveys = new ArrayList<>();
 
@@ -138,7 +136,9 @@ public class Home extends AppCompatActivity {
 
     public class RequestRawJSON extends AsyncTask<String, String, String> {
 
+        OkHttpClient client = new OkHttpClient();
         private String URL;
+
         public RequestRawJSON(String URL) {
             this.URL = URL;
         }
@@ -148,7 +148,6 @@ public class Home extends AppCompatActivity {
             super.onPreExecute();
         }
 
-        OkHttpClient client = new OkHttpClient();
         @Override
         protected String doInBackground(String... params) {
             /*if (monitorConnectivity()){

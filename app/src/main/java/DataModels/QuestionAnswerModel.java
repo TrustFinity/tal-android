@@ -10,6 +10,7 @@ public class QuestionAnswerModel {
     private String questionType;
     private String question;
     private String[] responses;
+    private String selectedResponse;
 
     public QuestionAnswerModel(int surveyId, int questionId, String questionType, String question, String[] responses) {
         this.surveyId = surveyId;
@@ -17,6 +18,14 @@ public class QuestionAnswerModel {
         this.questionType = questionType;
         this.question = question;
         this.responses = responses;
+    }
+
+    public String getSelectedResponse() {
+        return selectedResponse;
+    }
+
+    public void setSelectedResponse(String selectedResponse) {
+        this.selectedResponse = selectedResponse;
     }
 
     public int getQuestionId() {
