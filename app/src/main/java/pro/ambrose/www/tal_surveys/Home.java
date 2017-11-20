@@ -124,11 +124,15 @@ public class Home extends AppCompatActivity {
         JSONArray array = new JSONArray(rawJSON);
         surveys = new ArrayList<>();
 
-        for (int i = 0; i < array.length(); i++) {
+        try {
+            for (int i = 0; i < array.length(); i++) {
 
-            surveys.add(new SurveyModel(array.getJSONObject(i).getString("name"),
-                    array.getJSONObject(i).getString("description")));
-            Log.d(TAG, surveys.get(i).getName());
+                surveys.add(new SurveyModel(array.getJSONObject(i).getString("name"),
+                        array.getJSONObject(i).getString("description")));
+                Log.d(TAG, surveys.get(i).getName());
+            }
+        } catch (NullPointerException ex) {
+            Log.e(TAG, ex.getMessage());
         }
         mAdapter = new SurveyViewAdapter(surveys);
         mRecyclerView.setAdapter(mAdapter);

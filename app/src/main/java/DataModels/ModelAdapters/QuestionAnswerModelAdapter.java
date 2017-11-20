@@ -79,6 +79,7 @@ public class QuestionAnswerModelAdapter extends BaseAdapter {
 
         for (int i = 0; i < viewHolder.questionAnswerModel.getResponses().length; i++) {
             RadioButton radioButton = new RadioButton(context);
+            radioButton.setTextColor(R.color.white);
             radioButton.setText(viewHolder.questionAnswerModel.getResponses()[i]);
             radioButton.setId(i);
             viewHolder.radioGroup.addView(radioButton);

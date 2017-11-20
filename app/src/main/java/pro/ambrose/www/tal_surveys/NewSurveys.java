@@ -2,9 +2,9 @@ package pro.ambrose.www.tal_surveys;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -26,8 +26,8 @@ import okhttp3.Response;
 public class NewSurveys extends AppCompatActivity {
 
     public final String USER_SURVEYS_URL = "http://tal-surveys.herokuapp.com/api/v1/get-for-user";
-    private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
     ListView new_survey_list;
+    private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
     private ArrayList<NewSurveyModel> new_suvey_data;
     private String TAG = "NewSurvey";
 
@@ -55,8 +55,7 @@ public class NewSurveys extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent answer_intent = new Intent(getApplicationContext(), AnswerSurvey.class);
-                        answer_intent.putExtra("position", position);
-                        answer_intent.putExtra("data", new_suvey_data);
+                        answer_intent.putExtra("survey_id", new_suvey_data.get(position).getSurveyId());
                         startActivity(answer_intent);
                     }
                 }).show();
@@ -65,9 +64,27 @@ public class NewSurveys extends AppCompatActivity {
 
     }
 
+    public void updateUI(String rawJSON) throws JSONException {
+        JSONArray array = new JSONArray(rawJSON);
+        new_suvey_data = new ArrayList<>();
+        for (int i = 0; i < array.length(); i++) {
+            new_suvey_data.add(new NewSurveyModel(
+                    array.getJSONObject(i).getInt("id"),
+                    //  array.getJSONObject(i).getJSONObject("survey_question").getInt("id"),
+                    12,
+                    array.getJSONObject(i).getString("name"),
+                    array.getJSONObject(i).getString("description"),
+                    "What is your name?"));
+            // array.getJSONObject(i).getJSONObject("survey_question").getString("question")));
+        }
+        new_survey_list.setAdapter(new NewSurveysAdapter(new_suvey_data, getApplicationContext()));
+    }
+
     public class RequestRawJSON extends AsyncTask<String, String, String> {
 
+        OkHttpClient client = new OkHttpClient();
         private String URL;
+
         public RequestRawJSON(String URL) {
             this.URL = URL;
         }
@@ -77,7 +94,6 @@ public class NewSurveys extends AppCompatActivity {
             super.onPreExecute();
         }
 
-        OkHttpClient client = new OkHttpClient();
         @Override
         protected String doInBackground(String... params) {
             Request request = new Request.Builder()
@@ -103,21 +119,5 @@ public class NewSurveys extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-    }
-
-    public void updateUI(String rawJSON) throws JSONException {
-        JSONArray array = new JSONArray(rawJSON);
-        new_suvey_data = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++) {
-            new_suvey_data.add(new NewSurveyModel(
-                    array.getJSONObject(i).getInt("id"),
-                    //  array.getJSONObject(i).getJSONObject("survey_question").getInt("id"),
-                    12,
-                    array.getJSONObject(i).getString("name"),
-                    array.getJSONObject(i).getString("description"),
-                    "What is your name?"));
-                    // array.getJSONObject(i).getJSONObject("survey_question").getString("question")));
-        }
-        new_survey_list.setAdapter(new NewSurveysAdapter(new_suvey_data, getApplicationContext()));
     }
 }

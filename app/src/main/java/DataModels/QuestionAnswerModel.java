@@ -20,6 +20,10 @@ public class QuestionAnswerModel {
         this.responses = responses;
     }
 
+    public QuestionAnswerModel() {
+
+    }
+
     public String getSelectedResponse() {
         return selectedResponse;
     }
