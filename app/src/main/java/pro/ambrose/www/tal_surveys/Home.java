@@ -121,10 +121,10 @@ public class Home extends AppCompatActivity {
     public void updateUI(String rawJSON) throws JSONException {
         // Null pointer exception thrown here in the below line coz of no
         // internet connection.
-        JSONArray array = new JSONArray(rawJSON);
         surveys = new ArrayList<>();
 
         try {
+            JSONArray array = new JSONArray(rawJSON);
             for (int i = 0; i < array.length(); i++) {
 
                 surveys.add(new SurveyModel(array.getJSONObject(i).getString("name"),
@@ -133,6 +133,7 @@ public class Home extends AppCompatActivity {
             }
         } catch (NullPointerException ex) {
             Log.e(TAG, ex.getMessage());
+            Log.d(TAG, "Seems like you don't have a fast internet now...");
         }
         mAdapter = new SurveyViewAdapter(surveys);
         mRecyclerView.setAdapter(mAdapter);

@@ -9,8 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.facebook.FacebookSdk;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -36,7 +34,6 @@ public class NewSurveys extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_surveys);
         new_survey_list = (ListView) findViewById(R.id.new_surveys);
-        FacebookSdk.sdkInitialize(getApplicationContext());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) findViewById(R.id.main_swipe);

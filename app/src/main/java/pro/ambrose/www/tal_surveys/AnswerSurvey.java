@@ -1,5 +1,6 @@
 package pro.ambrose.www.tal_surveys;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Profile;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -19,13 +22,17 @@ import java.util.ArrayList;
 import DataModels.ModelAdapters.QuestionAnswerModelAdapter;
 import DataModels.NewSurveyModel;
 import DataModels.QuestionAnswerModel;
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AnswerSurvey extends AppCompatActivity implements QuestionAnswerModelAdapter.SendAnswerListener {
 
     public final String USER_SURVEYS_URL = "http://tal-surveys.herokuapp.com/api/v1/get-survey-questions/";
+    public final String POST_USER_SURVEYS_URL_BASE = "http://tal-surveys.herokuapp.com/api/v1";
+    public String access_token;
     ArrayList<NewSurveyModel> new_survey_data;
     int survey_id;
     ListView question_answers;
@@ -35,11 +42,21 @@ public class AnswerSurvey extends AppCompatActivity implements QuestionAnswerMod
     Button goback_btn;
     private String TAG = "AnswerSurvey";
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer_survey);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (Profile.getCurrentProfile() == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+        }
+
+        this.access_token = Profile.getCurrentProfile().getId();
+        progressDialog = new ProgressDialog(this);
+
         new_survey_data = (ArrayList<NewSurveyModel>) getIntent().getSerializableExtra("data");
         survey_id = getIntent().getIntExtra("survey_id", 0);
 
@@ -54,8 +71,14 @@ public class AnswerSurvey extends AppCompatActivity implements QuestionAnswerMod
 
     @Override
     public void onSendAnswerButtonListener(View view, int position, String answer) {
-        answer = questionAnswerModels.get(position).getSelectedResponse();
+        QuestionAnswerModel questionAnswerModel = questionAnswerModels.get(position);
+
+
         // send the response to the server.
+        new PostUserData(POST_USER_SURVEYS_URL_BASE + "/answer/" + questionAnswerModel.getSurveyId() + "/" + questionAnswerModel.getQuestionId(),
+                position).execute();
+
+
         // Do all this on successful submission of the response.
         questionAnswerModels.remove(position);
         questionAnswerModelAdapter = new QuestionAnswerModelAdapter(this, questionAnswerModels);
@@ -63,7 +86,7 @@ public class AnswerSurvey extends AppCompatActivity implements QuestionAnswerMod
         question_answers.setAdapter(questionAnswerModelAdapter);
         questionAnswerModelAdapter.notifyDataSetChanged();
 
-        Toast.makeText(this, "Answer: " + answer, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Answer: " + questionAnswerModel.getSelectedResponse(), Toast.LENGTH_SHORT).show();
         if (questionAnswerModels.size() == 0) {
             success_message.setVisibility(View.VISIBLE);
             goback_btn.setVisibility(View.VISIBLE);
@@ -119,6 +142,10 @@ public class AnswerSurvey extends AppCompatActivity implements QuestionAnswerMod
         question_answers.setAdapter(questionAnswerModelAdapter);
     }
 
+    private void handleUI(String response) {
+
+    }
+
     public class RequestRawJSON extends AsyncTask<String, String, String> {
 
         OkHttpClient client = new OkHttpClient();
@@ -130,6 +157,8 @@ public class AnswerSurvey extends AppCompatActivity implements QuestionAnswerMod
 
         @Override
         protected void onPreExecute() {
+            progressDialog.setMessage("Loading questions...");
+            progressDialog.show();
             super.onPreExecute();
         }
 
@@ -152,7 +181,58 @@ public class AnswerSurvey extends AppCompatActivity implements QuestionAnswerMod
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             updateUI(s);
+            progressDialog.hide();
         }
     }
 
+    private class PostUserData extends AsyncTask<String, String, String> {
+
+        OkHttpClient client = new OkHttpClient();
+        private String URL;
+        private int position;
+        private QuestionAnswerModel questionAnswer;
+
+        private PostUserData(String URL, int position) {
+            this.URL = URL;
+            this.position = position;
+            this.questionAnswer = questionAnswerModels.get(position);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("Submitting response...");
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            RequestBody body = new FormBody.Builder()
+                    .add("answer", String.valueOf(questionAnswer.getSelectedResponse()))
+                    .add("facebook_id", access_token)
+                    .build();
+            Request request = new Request.Builder()
+                    .url(this.URL)
+                    .post(body)
+                    .build();
+            Response response;
+            try {
+                response = client.newCall(request).execute();
+                return response.body().string();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            // hide progress bar.
+            Log.d(TAG, s);
+            handleUI(s);
+            progressDialog.setMessage(s);
+            progressDialog.hide();
+        }
+    }
 }
