@@ -2,7 +2,7 @@
     <string name="facebook_app_id">1639391189464946</string>
     <string name="fb_login_protocol_scheme">fb1639391189464946</string>
 
-    <string name="app_name">TAL - Surveys</string>
+    <string name="app_name">MyTAL</string>
     <string name="title_activity_home">TAL - Surveys</string>
     <string name="title_all">All</string>
     <string name="title_dashboard">Dashboard</string>

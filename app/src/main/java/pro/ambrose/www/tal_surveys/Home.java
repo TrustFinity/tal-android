@@ -48,11 +48,12 @@ public class Home extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.navigation_all:
-                    mTextMessage.setText(R.string.title_all);
-                    return true;
-                case R.id.navigation_surveys:
-                    startActivity(new Intent(getApplicationContext(), NewSurveys.class));
+                // case R.id.navigation_all:
+                //    mTextMessage.setText(R.string.title_all);
+                //    return true;
+
+                 case R.id.navigation_surveys:
+//                    startActivity(new Intent(getApplicationContext(), NewSurveys.class));
                     mTextMessage.setText(R.string.title_surveys);
                     return true;
                 case R.id.navigation_profile:
