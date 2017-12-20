@@ -1,5 +1,6 @@
 package pro.ambrose.www.tal_surveys;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -37,7 +38,7 @@ public class Home extends AppCompatActivity {
     private ListView new_survey_list;
     private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
     private ArrayList<NewSurveyModel> new_suvey_data;
-
+    private ProgressDialog progressDialog;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -79,6 +80,7 @@ public class Home extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) findViewById(R.id.main_swipe);
+        progressDialog = new ProgressDialog(this);
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
                 if (isNetworkAvailable(getApplicationContext())) {
@@ -116,15 +118,17 @@ public class Home extends AppCompatActivity {
     }
 
     public void updateUI(String rawJSON) throws JSONException {
-        JSONArray array = new JSONArray(rawJSON); // problem here. length on null object
         new_suvey_data = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++) {
-            new_suvey_data.add(new NewSurveyModel(
-                    array.getJSONObject(i).getInt("id"),
-                    12,
-                    array.getJSONObject(i).getString("name"),
-                    array.getJSONObject(i).getString("description"),
-                    "What is your name?"));
+        if (rawJSON != null) {
+            JSONArray array = new JSONArray(rawJSON);
+            for (int i = 0; i < array.length(); i++) {
+                new_suvey_data.add(new NewSurveyModel(
+                        array.getJSONObject(i).getInt("id"),
+                        12,
+                        array.getJSONObject(i).getString("name"),
+                        array.getJSONObject(i).getString("description"),
+                        "What is your name?"));
+            }
         }
         new_survey_list.setAdapter(new NewSurveysAdapter(new_suvey_data, getApplicationContext()));
     }
@@ -140,6 +144,9 @@ public class Home extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+
+            progressDialog.setMessage("Loading surveys ...");
+            progressDialog.show();
             super.onPreExecute();
         }
 
@@ -172,6 +179,7 @@ public class Home extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            progressDialog.hide();
         }
     }
 

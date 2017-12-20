@@ -14,7 +14,7 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="10dp"
-        android:text="There is no Internet Connection."
+        android:text="There is no Internet Connection"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="24dp" />
