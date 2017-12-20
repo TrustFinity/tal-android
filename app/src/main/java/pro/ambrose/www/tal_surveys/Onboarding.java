@@ -24,7 +24,7 @@ public class Onboarding extends AhoyOnboarderActivity {
         card_one.setDescriptionTextSize(dpToPixels(4, this));
         card_one.setIconLayoutParams(500, 500, 5, 5, 5, 5);
 
-        AhoyOnboarderCard card_two = new AhoyOnboarderCard("Opinions", "Unlock the value of your opinions, get rewarded.", R.mipmap.ic_launcher);
+        AhoyOnboarderCard card_two = new AhoyOnboarderCard("Welcome", "Unlock the value of your opinions, get rewarded.", R.mipmap.ic_launcher);
         card_two.setBackgroundColor(R.color.black_transparent);
         card_two.setTitleColor(R.color.white);
         card_two.setDescriptionColor(R.color.grey_200);
