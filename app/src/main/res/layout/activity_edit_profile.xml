@@ -71,6 +71,22 @@
                 android:inputType="phone"
                 android:padding="5dp" />
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Choose prefered reward."
+                android:textAppearance="@style/TextAppearance.AppCompat" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/text_field_bg"
+                android:entries="@array/reward_methods"
+                android:padding="5dp" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"

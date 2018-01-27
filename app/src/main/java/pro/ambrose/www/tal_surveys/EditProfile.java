@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.facebook.Profile;
 
@@ -47,6 +49,7 @@ public class EditProfile extends AppCompatActivity {
     private String GET_DATA_URL = "http://mytalprofile.com/api/v1/get-profile?facebook_id=";
     private String UPDATE_DATA_URL = "http://mytalprofile.com/api/v1/update-respondent";
     private ProgressDialog progressDialog;
+    private Spinner reward_methods;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +93,8 @@ public class EditProfile extends AppCompatActivity {
         btn_update = (Button) findViewById(R.id.update_info);
 
         progressDialog = new ProgressDialog(this);
+
+        reward_methods = findViewById(R.id.spinner);
     }
 
     private void initValues() {
@@ -102,6 +107,13 @@ public class EditProfile extends AppCompatActivity {
         m_Occupation = occupation.getText().toString();
         m_City = city.getText().toString();
         m_Country = country.getText().toString();
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.reward_methods, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        reward_methods.setAdapter(adapter);
     }
 
     private void handlePostUserData(String s) {
