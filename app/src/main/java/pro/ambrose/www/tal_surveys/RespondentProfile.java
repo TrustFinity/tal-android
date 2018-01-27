@@ -30,7 +30,7 @@ public class RespondentProfile extends AppCompatActivity {
     private ImageView profile_image;
     private Button logout;
     private TextView names;
-    private String GET_DATA_URL = "http://tal-surveys.herokuapp.com/api/v1/get-profile?facebook_id=";
+    private String GET_DATA_URL = "http://mytalprofile.com/api/v1/get-profile?facebook_id=";
     private ProgressDialog progressDialog;
 
     @Override

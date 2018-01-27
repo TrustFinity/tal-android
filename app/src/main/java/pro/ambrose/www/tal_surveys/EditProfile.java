@@ -44,8 +44,8 @@ public class EditProfile extends AppCompatActivity {
             m_City,
             m_Country;
     private Button btn_update;
-    private String GET_DATA_URL = "http://tal-surveys.herokuapp.com/api/v1/get-profile?facebook_id=";
-    private String UPDATE_DATA_URL = "http://tal-surveys.herokuapp.com/api/v1/update-respondent";
+    private String GET_DATA_URL = "http://mytalprofile.com/api/v1/get-profile?facebook_id=";
+    private String UPDATE_DATA_URL = "http://mytalprofile.com/api/v1/update-respondent";
     private ProgressDialog progressDialog;
 
     @Override

@@ -35,7 +35,7 @@ import okhttp3.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginTag";
-    public String create_user_url = "http://tal-surveys.herokuapp.com/api/v1/new-respondent";
+    public String create_user_url = "http://mytalprofile.com/api/v1/new-respondent";
     public Profile profile;
     public String access_token;
     LoginButton loginButton;

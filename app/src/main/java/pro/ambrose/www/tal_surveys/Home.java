@@ -32,7 +32,7 @@ import okhttp3.Response;
 public class Home extends AppCompatActivity {
 
     private static final String TAG = "Home";
-    public final String USER_SURVEYS_URL = "http://tal-surveys.herokuapp.com/api/v1/get-for-user";
+    public final String USER_SURVEYS_URL = "http://mytalprofile.com/api/v1/get-for-user";
     public boolean isConnected = false;
     private TextView mTextMessage;
     private ListView new_survey_list;

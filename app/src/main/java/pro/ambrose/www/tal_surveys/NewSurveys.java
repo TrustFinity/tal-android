@@ -23,7 +23,7 @@ import okhttp3.Response;
 
 public class NewSurveys extends AppCompatActivity {
 
-    public final String USER_SURVEYS_URL = "http://tal-surveys.herokuapp.com/api/v1/get-for-user";
+    public final String USER_SURVEYS_URL = "http://mytalprofile.com/api/v1/get-for-user";
     ListView new_survey_list;
     private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
     private ArrayList<NewSurveyModel> new_suvey_data;
