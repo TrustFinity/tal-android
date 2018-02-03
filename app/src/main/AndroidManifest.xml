@@ -32,11 +32,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
 
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".Home"
@@ -63,7 +65,7 @@
         <activity
             android:name=".EditProfile"
             android:label="Edit Profile"
-            android:parentActivityName=".RespondentProfile"></activity>
+            android:parentActivityName=".RespondentProfile" />
         <activity android:name=".Onboarding">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -71,6 +73,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".NoInternet"></activity>
     </application>
 
 </manifest>

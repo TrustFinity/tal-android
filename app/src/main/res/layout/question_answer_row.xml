@@ -10,8 +10,9 @@
         android:id="@+id/question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Question heres." />.
-        <!--android:textAppearance="@style/TextAppearance.AppCompat.Notification.Title" />-->
+        android:text="Question heres."
+        android:textColor="@color/black"
+        android:textSize="18dp" />.
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -30,4 +31,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit Answer" />
+
 </LinearLayout>

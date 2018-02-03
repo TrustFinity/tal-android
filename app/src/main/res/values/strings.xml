@@ -16,4 +16,11 @@
         Complete your profile to get more surveys tailored for you. More rewards.
         The fewer empty values you have, the higher the chances of getting more surveys.
     </string>
+
+    <string-array name="reward_methods">
+        <item>Airtime Reward</item>
+        <item>Mobile Money (coming soon)</item>
+        <item>Donate (coming soon)</item>
+        <item>PayPal (coming soon)</item>
+    </string-array>
 </resources>

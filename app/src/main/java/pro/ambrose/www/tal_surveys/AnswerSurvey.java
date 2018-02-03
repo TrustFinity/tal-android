@@ -30,8 +30,8 @@ import okhttp3.Response;
 
 public class AnswerSurvey extends AppCompatActivity implements QuestionAnswerModelAdapter.SendAnswerListener {
 
-    public final String USER_SURVEYS_URL = "http://tal-surveys.herokuapp.com/api/v1/get-survey-questions/";
-    public final String POST_USER_SURVEYS_URL_BASE = "http://tal-surveys.herokuapp.com/api/v1";
+    public final String USER_SURVEYS_URL = "http://mytalprofile.com/api/v1/get-survey-questions/";
+    public final String POST_USER_SURVEYS_URL_BASE = "http://mytalprofile.com/api/v1";
     public String access_token;
     ArrayList<NewSurveyModel> new_survey_data;
     int survey_id;

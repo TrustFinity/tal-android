@@ -1,6 +1,7 @@
 package DataModels.ModelAdapters;
 
 import android.content.Context;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,8 +79,8 @@ public class QuestionAnswerModelAdapter extends BaseAdapter {
         viewHolder.questionAnswerModel = questionAnswerModels.get(viewHolder.position);
 
         for (int i = 0; i < viewHolder.questionAnswerModel.getResponses().length; i++) {
-            RadioButton radioButton = new RadioButton(context);
-            radioButton.setTextColor(R.color.white);
+            RadioButton radioButton = new RadioButton(new ContextThemeWrapper(context, R.style.AppTheme));
+            radioButton.getResources().getColor(R.color.white);
             radioButton.setText(viewHolder.questionAnswerModel.getResponses()[i]);
             radioButton.setId(i);
             viewHolder.radioGroup.addView(radioButton);
