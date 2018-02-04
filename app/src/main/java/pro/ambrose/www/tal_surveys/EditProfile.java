@@ -205,9 +205,9 @@ public class EditProfile extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
             progressDialog.setMessage("Populating old data...");
             progressDialog.show();
-            super.onPreExecute();
         }
 
         @Override

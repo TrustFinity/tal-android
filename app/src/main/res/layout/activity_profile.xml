@@ -41,15 +41,14 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="5dp"
                     app:civ_border_color="#FF000000"
-                    app:civ_border_width="2dp"
-                    app:srcCompat="@drawable/ic_dashboard_black_24dp" />
+                    app:civ_border_width="2dp" />
 
                 <TextView
                     android:id="@+id/names"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Mwaka Ambrose"
+                    android:text=""
                     android:textAlignment="center"
                     android:textSize="18sp"
                     android:textStyle="bold" />
