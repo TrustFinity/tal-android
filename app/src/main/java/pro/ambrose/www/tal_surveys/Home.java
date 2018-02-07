@@ -17,6 +17,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.facebook.Profile;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -46,19 +50,24 @@ public class Home extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                 case R.id.navigation_surveys:
-                     // startActivity(new Intent(getApplicationContext(), NewSurveys.class));
+                case R.id.navigation_all:
                     mTextMessage.setText(R.string.title_surveys);
                     return true;
+                case R.id.navigation_surveys:
+                    mTextMessage.setText(R.string.title_surveys);
+                    startActivity(new Intent(getApplicationContext(), AnsweredSurveys.class));
+                    return true;
                 case R.id.navigation_profile:
-                    startActivity(new Intent(getApplicationContext(), RespondentProfile.class));
                     mTextMessage.setText(R.string.title_profile);
+                    startActivity(new Intent(getApplicationContext(), RespondentProfile.class));
                     return true;
             }
             return false;
         }
 
     };
+    private Profile profile;
+    private GoogleSignInAccount account;
 
     public static boolean isNetworkAvailable(final Context context) {
         final ConnectivityManager cm = (ConnectivityManager)
@@ -75,6 +84,15 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         getSupportActionBar().hide();
+
+        profile = Profile.getCurrentProfile();
+        account = GoogleSignIn.getLastSignedInAccount(this);
+
+        if (profile == null && account == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
+
         mTextMessage = (TextView) findViewById(R.id.message);
         new_survey_list = (ListView) findViewById(R.id.new_surveys);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -119,6 +137,14 @@ public class Home extends AppCompatActivity {
 
     public void updateUI(String rawJSON) throws JSONException {
         new_suvey_data = new ArrayList<>();
+
+        if (rawJSON == null){
+            Intent no_internet = new Intent(getApplicationContext(), NoInternet.class);
+            no_internet.putExtra("activity", "pro.ambrose.www.tal_surveys.Home");
+            startActivity(no_internet);
+            finish();
+        }
+
         if (rawJSON != null) {
             JSONArray array = new JSONArray(rawJSON);
             for (int i = 0; i < array.length(); i++) {
@@ -144,19 +170,13 @@ public class Home extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-
+            super.onPreExecute();
             progressDialog.setMessage("Loading surveys ...");
             progressDialog.show();
-            super.onPreExecute();
         }
 
         @Override
         protected String doInBackground(String... params) {
-            /*if (monitorConnectivity()){
-                return "We are having trouble connecting to the internet. " +
-                        "\nAre you sure you have internet access?" +
-                        "\n We will keep trying though";
-            }*/
             Request request = new Request.Builder()
                     .url(this.URL)
                     .build();

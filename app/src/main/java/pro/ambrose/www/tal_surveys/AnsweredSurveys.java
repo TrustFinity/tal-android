@@ -5,9 +5,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.facebook.Profile;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,13 +26,16 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class NewSurveys extends AppCompatActivity {
+public class AnsweredSurveys extends AppCompatActivity {
 
-    public final String USER_SURVEYS_URL = "http://mytalprofile.com/api/v1/get-for-user";
+    public final String USER_SURVEYS_URL = "http://mytalprofile.com/api/v1/all-surveys";
     ListView new_survey_list;
     private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
     private ArrayList<NewSurveyModel> new_suvey_data;
-    private String TAG = "NewSurvey";
+    private String TAG = "Answered: ";
+    private GoogleSignInAccount account;
+    private Profile profile;
+    private String access_token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +44,23 @@ public class NewSurveys extends AppCompatActivity {
         new_survey_list = (ListView) findViewById(R.id.new_surveys);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        account = GoogleSignIn.getLastSignedInAccount(this);
+        profile = Profile.getCurrentProfile();
+
+        if (profile == null && account == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
+        if (profile != null) {
+            this.access_token = profile.getId();
+        }
+
+        if (account != null){
+            this.access_token = account.getId();
+        }
+
+        Log.d(TAG, this.access_token);
+
         mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) findViewById(R.id.main_swipe);
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
@@ -43,19 +68,27 @@ public class NewSurveys extends AppCompatActivity {
             }
         });
 
-        new RequestRawJSON(USER_SURVEYS_URL).execute();
+        new RequestRawJSON(USER_SURVEYS_URL+"?facebook_id="+this.access_token).execute();
 
         new_survey_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                Snackbar.make(view, "Press start to begin the survey", Snackbar.LENGTH_INDEFINITE).setAction("Start", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent answer_intent = new Intent(getApplicationContext(), AnswerSurvey.class);
-                        answer_intent.putExtra("survey_id", new_suvey_data.get(position).getSurveyId());
-                        startActivity(answer_intent);
-                    }
-                }).show();
+//                Snackbar.make(view, "Press start to begin the survey", Snackbar.LENGTH_INDEFINITE).setAction("Start", new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent answer_intent = new Intent(getApplicationContext(), AnswerSurvey.class);
+//                        answer_intent.putExtra("survey_id", new_suvey_data.get(position).getSurveyId());
+//                        startActivity(answer_intent);
+//                    }
+//                }).show();
+
+                Snackbar.make(view, "You have already taken this survey.", Snackbar.LENGTH_INDEFINITE).setAction("Back",
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(AnsweredSurveys.this, Home.class));
+                            }
+                        }).show();
             }
         });
 

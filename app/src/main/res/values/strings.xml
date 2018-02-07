@@ -4,11 +4,11 @@
 
     <string name="app_name">MyTAL</string>
     <string name="title_activity_home">TAL - Surveys</string>
-    <string name="title_all">All</string>
+    <string name="title_all">Answered</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_profile">Profile</string>
-    <string name="title_surveys">Surveys</string>
+    <string name="title_surveys">New</string>
     <string name="all_frame_words">Complete your profile to get more \n exciting insights and activities</string>
     <string name="title_activity_profile">Profile</string>
     <string name="action_settings">Settings</string>
@@ -16,6 +16,7 @@
         Complete your profile to get more surveys tailored for you. More rewards.
         The fewer empty values you have, the higher the chances of getting more surveys.
     </string>
+    <string name="action_about">About App</string>
 
     <string-array name="reward_methods">
         <item>Airtime Reward</item>

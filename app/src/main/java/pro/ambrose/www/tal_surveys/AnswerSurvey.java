@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +45,8 @@ public class AnswerSurvey extends AppCompatActivity implements QuestionAnswerMod
     private String TAG = "AnswerSurvey";
 
     private ProgressDialog progressDialog;
+    private Profile profile;
+    private GoogleSignInAccount account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +54,20 @@ public class AnswerSurvey extends AppCompatActivity implements QuestionAnswerMod
         setContentView(R.layout.activity_answer_survey);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (Profile.getCurrentProfile() == null) {
+        profile = Profile.getCurrentProfile();
+        account = GoogleSignIn.getLastSignedInAccount(this);
+
+        if (profile == null && account == null) {
             startActivity(new Intent(this, LoginActivity.class));
+            finish();
         }
 
-        this.access_token = Profile.getCurrentProfile().getId();
+        if (profile != null) {
+            this.access_token = profile.getId();
+        }else if (account != null){
+            this.access_token = account.getId();
+        }
+
         progressDialog = new ProgressDialog(this);
 
         new_survey_data = (ArrayList<NewSurveyModel>) getIntent().getSerializableExtra("data");
@@ -93,7 +106,7 @@ public class AnswerSurvey extends AppCompatActivity implements QuestionAnswerMod
             goback_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), NewSurveys.class));
+                    startActivity(new Intent(getApplicationContext(), AnsweredSurveys.class));
                 }
             });
         }
@@ -112,7 +125,7 @@ public class AnswerSurvey extends AppCompatActivity implements QuestionAnswerMod
                 goback_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(getApplicationContext(), NewSurveys.class));
+                        startActivity(new Intent(getApplicationContext(), AnsweredSurveys.class));
                     }
                 });
             }

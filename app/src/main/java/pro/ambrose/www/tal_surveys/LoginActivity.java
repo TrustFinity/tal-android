@@ -10,8 +10,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -21,6 +24,13 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -35,11 +45,15 @@ import okhttp3.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginTag";
+    private static final int RC_SIGN_IN = 1993;
     public String create_user_url = "http://mytalprofile.com/api/v1/new-respondent";
     public Profile profile;
     public String access_token;
     LoginButton loginButton;
     private CallbackManager mCallbackManager;
+    private GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInAccount account;
+    private SignInButton signInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +62,36 @@ public class LoginActivity extends AppCompatActivity {
             Window window = getWindow();
             window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
+        // Configure sign-in to request the user's ID, email address, and basic
+        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        account = GoogleSignIn.getLastSignedInAccount(this);
+        if (account != null){
+            handlePostUserData(account.getDisplayName());
+        }
+
         FacebookSdk.sdkInitialize(getApplicationContext());
         if (Profile.getCurrentProfile() != null){
             handlePostUserData("user already logged in");
         }
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
+
+        signInButton = (SignInButton) findViewById(R.id.sign_in_button_google);
+        setGooglePlusButtonText(signInButton);
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signIn();
+            }
+        });
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
@@ -93,19 +131,55 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    protected void setGooglePlusButtonText(SignInButton signInButton) {
+        // Find the TextView that is inside of the SignInButton and set its text
+        for (int i = 0; i < signInButton.getChildCount(); i++) {
+            View v = signInButton.getChildAt(i);
+
+            if (v instanceof TextView) {
+                TextView tv = (TextView) v;
+                tv.setText("Continue with Google");
+                tv.setTextSize(15);
+                return;
+            }
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> task) {
+        try {
+            account = task.getResult(ApiException.class);
+            Log.d(TAG, account.getEmail());
+            access_token = account.getId();
+            new PostUserData(create_user_url, "google").execute();
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            Toast.makeText(this, "Failed to signin", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void saveUserDataOnline(AccessToken accessToken) {
         profile = Profile.getCurrentProfile();
         access_token = accessToken.getUserId();
-        new PostUserData(create_user_url).execute();
+        new PostUserData(create_user_url, "facebook").execute();
     }
 
     public void handlePostUserData(String response) {
+        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(LoginActivity.this, Home.class));
         finish();
         Log.d(TAG, response);
@@ -115,9 +189,12 @@ public class LoginActivity extends AppCompatActivity {
 
         OkHttpClient client = new OkHttpClient();
         private String URL;
+        private String type;
+        private RequestBody body;
 
-        private PostUserData(String URL) {
+        private PostUserData(String URL, String type) {
             this.URL = URL;
+            this.type = type;
         }
 
         @Override
@@ -128,16 +205,26 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             Log.d(TAG, access_token);
-            RequestBody body = new FormBody.Builder()
-                    .add("facebook_id", access_token)
-                    .add("first_name", profile.getFirstName())
-                    .add("middle_name", profile.getMiddleName())
-                    .add("last_name", profile.getLastName())
-                    .add("image_url", profile.getProfilePictureUri(500, 500).toString())
-                    .build();
+            if (this.type == "facebook"){
+                this.body = new FormBody.Builder()
+                        .add("facebook_id", access_token)
+                        .add("first_name", profile.getFirstName())
+                        .add("middle_name", profile.getMiddleName())
+                        .add("last_name", profile.getLastName())
+                        .add("image_url", profile.getProfilePictureUri(500, 500).toString())
+                        .build();
+            }else {
+                this.body = new FormBody.Builder()
+                        .add("facebook_id", access_token)
+                        .add("first_name", account.getGivenName())
+                        .add("middle_name", "")
+                        .add("last_name", account.getFamilyName())
+                        .add("image_url", account.getPhotoUrl().toString())
+                        .build();
+            }
             Request request = new Request.Builder()
                     .url(this.URL)
-                    .post(body)
+                    .post(this.body)
                     .build();
             Response response;
             try {
@@ -154,5 +241,10 @@ public class LoginActivity extends AppCompatActivity {
             super.onPostExecute(s);
             handlePostUserData(s);
         }
+    }
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 }

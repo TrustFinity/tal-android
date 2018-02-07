@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.facebook.Profile;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,18 +53,29 @@ public class EditProfile extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Spinner reward_methods;
 
+    private GoogleSignInAccount account;
+    private Profile profile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        profile = Profile.getCurrentProfile();
+        account = GoogleSignIn.getLastSignedInAccount(this);
 
-        if (Profile.getCurrentProfile() == null) {
+        if (profile == null && account == null) {
             startActivity(new Intent(this, LoginActivity.class));
+            finish();
         }
 
-        this.access_token = Profile.getCurrentProfile().getId();
+        if (profile != null) {
+            this.access_token = Profile.getCurrentProfile().getId();
+        }else if (account != null){
+            this.access_token = account.getId();
+        }
+
         Log.d(TAG, access_token);
 
         initUI();

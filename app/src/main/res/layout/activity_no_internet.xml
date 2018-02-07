@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="16dp"
     tools:context="pro.ambrose.www.tal_surveys.NoInternet">
 
     <TextView
@@ -14,10 +16,10 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="10dp"
-        android:text="There is no Internet Connection"
+        android:text="We are experiencing some difficulties with the connection."
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="24dp" />
+        android:textSize="22sp" />
 
     <Button
         android:id="@+id/retry_internet"
@@ -27,4 +29,13 @@
         android:layout_centerHorizontal="true"
         android:text="Retry again"
         android:textAlignment="center" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/internet_connection"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="54dp"
+        app:srcCompat="@drawable/ic_error_black_24dp" />
 </RelativeLayout>
