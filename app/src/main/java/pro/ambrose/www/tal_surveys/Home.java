@@ -123,7 +123,7 @@ public class Home extends AppCompatActivity {
         new_survey_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                Snackbar.make(view, "Press start to begin the survey", Snackbar.LENGTH_INDEFINITE).setAction("Start", new View.OnClickListener() {
+                Snackbar.make(view, "Press start to begin the survey", Snackbar.LENGTH_LONG).setAction("Start", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent answer_intent = new Intent(getApplicationContext(), AnswerSurvey.class);

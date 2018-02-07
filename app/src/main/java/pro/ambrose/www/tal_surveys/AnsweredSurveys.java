@@ -73,15 +73,6 @@ public class AnsweredSurveys extends AppCompatActivity {
         new_survey_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-//                Snackbar.make(view, "Press start to begin the survey", Snackbar.LENGTH_INDEFINITE).setAction("Start", new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent answer_intent = new Intent(getApplicationContext(), AnswerSurvey.class);
-//                        answer_intent.putExtra("survey_id", new_suvey_data.get(position).getSurveyId());
-//                        startActivity(answer_intent);
-//                    }
-//                }).show();
-
                 Snackbar.make(view, "You have already taken this survey.", Snackbar.LENGTH_INDEFINITE).setAction("Back",
                         new View.OnClickListener() {
                             @Override
@@ -95,17 +86,23 @@ public class AnsweredSurveys extends AppCompatActivity {
     }
 
     public void updateUI(String rawJSON) throws JSONException {
-        JSONArray array = new JSONArray(rawJSON);
         new_suvey_data = new ArrayList<>();
+
+        if (rawJSON == null){
+            Intent no_internet = new Intent(getApplicationContext(), AnsweredSurveys.class);
+            no_internet.putExtra("activity", "pro.ambrose.www.tal_surveys.RespondentProfile");
+            startActivity(no_internet);
+            finish();
+        }
+
+        JSONArray array = new JSONArray(rawJSON);
         for (int i = 0; i < array.length(); i++) {
             new_suvey_data.add(new NewSurveyModel(
                     array.getJSONObject(i).getInt("id"),
-                    //  array.getJSONObject(i).getJSONObject("survey_question").getInt("id"),
                     12,
                     array.getJSONObject(i).getString("name"),
                     array.getJSONObject(i).getString("description"),
                     "What is your name?"));
-            // array.getJSONObject(i).getJSONObject("survey_question").getString("question")));
         }
         new_survey_list.setAdapter(new NewSurveysAdapter(new_suvey_data, getApplicationContext()));
     }
