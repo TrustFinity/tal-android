@@ -7,8 +7,8 @@ android {
         applicationId "pro.ambrose.www.tal_surveys"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 3
-        versionName "1.3"
+        versionCode 4
+        versionName "1.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

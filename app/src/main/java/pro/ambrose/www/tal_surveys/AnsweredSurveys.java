@@ -16,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -64,7 +65,7 @@ public class AnsweredSurveys extends AppCompatActivity {
         mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) findViewById(R.id.main_swipe);
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
-                new RequestRawJSON(USER_SURVEYS_URL).execute();
+                new RequestRawJSON(USER_SURVEYS_URL+"?facebook_id="+access_token).execute();
             }
         });
 
@@ -97,11 +98,13 @@ public class AnsweredSurveys extends AppCompatActivity {
 
         JSONArray array = new JSONArray(rawJSON);
         for (int i = 0; i < array.length(); i++) {
+            JSONObject survey = array.getJSONObject(i).getJSONObject("survey");
+
             new_suvey_data.add(new NewSurveyModel(
-                    array.getJSONObject(i).getInt("id"),
+                    survey.getInt("id"),
                     12,
-                    array.getJSONObject(i).getString("name"),
-                    array.getJSONObject(i).getString("description"),
+                    survey.getString("name"),
+                    survey.getString("description"),
                     "What is your name?"));
         }
         new_survey_list.setAdapter(new NewSurveysAdapter(new_suvey_data, getApplicationContext()));

@@ -13,7 +13,7 @@ public class About extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Element versionElement = new Element();
-        versionElement.setTitle("Version 1.3");
+        versionElement.setTitle("Version 1.4");
         Element adsElement = new Element();
         adsElement.setTitle("Developed By TrustFinity");
         View aboutPage = new AboutPage(getApplicationContext())
@@ -22,11 +22,11 @@ public class About extends AppCompatActivity {
                 .setImage(R.mipmap.ic_launcher)
                 .addItem(versionElement)
                 .addItem(adsElement)
-                .addEmail("admin@traceafricalogistics.com")
-                .addWebsite("http://traceafricalogistics.com/")
-                .addFacebook("TraceAfricaLogistics")
-                .addTwitter("TraceAfricaLog")
-                .addPlayStore("pro.ambrose.www.tal_surveys")
+                .addEmail("admin@traceafricalogistics.com", "Send us an email")
+                .addWebsite("http://traceafricalogistics.com/", "Visit our website")
+                .addFacebook("TraceAfricaLogistics", "Like us on facebook")
+                .addTwitter("TraceAfricaLog", "Follow us on twitter")
+                .addPlayStore("pro.ambrose.www.tal_surveys", "Rate us on Google Play")
                 .create();
         setContentView(aboutPage);
         setTitle("About App");

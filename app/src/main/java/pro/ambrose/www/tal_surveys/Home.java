@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +24,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -38,7 +40,7 @@ public class Home extends AppCompatActivity {
     private static final String TAG = "Home";
     public final String USER_SURVEYS_URL = "http://mytalprofile.com/api/v1/get-for-user";
     public boolean isConnected = false;
-    private TextView mTextMessage;
+    private TextView mTextMessage, mAboutUs;
     private ListView new_survey_list;
     private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
     private ArrayList<NewSurveyModel> new_suvey_data;
@@ -68,6 +70,7 @@ public class Home extends AppCompatActivity {
     };
     private Profile profile;
     private GoogleSignInAccount account;
+    private String access_token;
 
     public static boolean isNetworkAvailable(final Context context) {
         final ConnectivityManager cm = (ConnectivityManager)
@@ -93,7 +96,18 @@ public class Home extends AppCompatActivity {
             finish();
         }
 
+        if (profile != null) {
+            this.access_token = profile.getId();
+        }
+
+        if (account != null){
+            this.access_token = account.getId();
+        }
+
+        Log.d(TAG, this.access_token);
+
         mTextMessage = (TextView) findViewById(R.id.message);
+        mAboutUs = (TextView) findViewById(R.id.about_us);
         new_survey_list = (ListView) findViewById(R.id.new_surveys);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -102,7 +116,7 @@ public class Home extends AppCompatActivity {
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
                 if (isNetworkAvailable(getApplicationContext())) {
-                    new RequestRawJSON(USER_SURVEYS_URL).execute();
+                    new RequestRawJSON(USER_SURVEYS_URL+"?facebook_id="+access_token).execute();
                 } else {
                     Intent no_internet = new Intent(getApplicationContext(), NoInternet.class);
                     no_internet.putExtra("activity", "pro.ambrose.www.tal_surveys.Home");
@@ -112,7 +126,7 @@ public class Home extends AppCompatActivity {
         });
 
         if (isNetworkAvailable(this)) {
-            new RequestRawJSON(USER_SURVEYS_URL).execute();
+            new RequestRawJSON(USER_SURVEYS_URL+"?facebook_id="+this.access_token).execute();
         } else {
             Intent no_internet = new Intent(getApplicationContext(), NoInternet.class);
             no_internet.putExtra("activity", "pro.ambrose.www.tal_surveys.Home");
@@ -133,6 +147,13 @@ public class Home extends AppCompatActivity {
                 }).show();
             }
         });
+
+        mAboutUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Home.this, About.class));
+            }
+        });
     }
 
     public void updateUI(String rawJSON) throws JSONException {
@@ -148,11 +169,14 @@ public class Home extends AppCompatActivity {
         if (rawJSON != null) {
             JSONArray array = new JSONArray(rawJSON);
             for (int i = 0; i < array.length(); i++) {
+
+                JSONObject survey = array.getJSONObject(i).getJSONObject("survey");
+
                 new_suvey_data.add(new NewSurveyModel(
-                        array.getJSONObject(i).getInt("id"),
+                        survey.getInt("id"),
                         12,
-                        array.getJSONObject(i).getString("name"),
-                        array.getJSONObject(i).getString("description"),
+                        survey.getString("name"),
+                        survey.getString("description"),
                         "What is your name?"));
             }
         }
@@ -195,6 +219,8 @@ public class Home extends AppCompatActivity {
             mWaveSwipeRefreshLayout.setRefreshing(false);
             super.onPostExecute(s);
             try {
+                Log.d(TAG, s);
+                Log.d(TAG, access_token);
                 updateUI(s);
             } catch (JSONException e) {
                 e.printStackTrace();
