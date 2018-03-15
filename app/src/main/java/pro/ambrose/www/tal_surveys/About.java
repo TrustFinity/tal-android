@@ -1,7 +1,7 @@
 package pro.ambrose.www.tal_surveys;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import mehdi.sakout.aboutpage.AboutPage;
@@ -13,7 +13,7 @@ public class About extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Element versionElement = new Element();
-        versionElement.setTitle("Version 1.4");
+        versionElement.setTitle("Version 1.6");
         Element adsElement = new Element();
         adsElement.setTitle("Developed By TrustFinity");
         View aboutPage = new AboutPage(getApplicationContext())

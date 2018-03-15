@@ -17,6 +17,8 @@
         The fewer empty values you have, the higher the chances of getting more surveys.
     </string>
     <string name="action_about">About App</string>
+    <string name="no_surveys">We have more great content coming up for you. Complete your profile to stay ahead.</string>
+    <string name="no_surveys_answered">Take some surveys to get contents here. Your journey has began.</string>
 
     <string-array name="reward_methods">
         <item>Airtime Reward</item>

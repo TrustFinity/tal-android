@@ -40,7 +40,7 @@ public class Home extends AppCompatActivity {
     private static final String TAG = "Home";
     public final String USER_SURVEYS_URL = "http://mytalprofile.com/api/v1/get-for-user";
     public boolean isConnected = false;
-    private TextView mTextMessage, mAboutUs;
+    private TextView mTextMessage, mAboutUs, no_surveys;
     private ListView new_survey_list;
     private WaveSwipeRefreshLayout mWaveSwipeRefreshLayout;
     private ArrayList<NewSurveyModel> new_suvey_data;
@@ -107,6 +107,9 @@ public class Home extends AppCompatActivity {
         Log.d(TAG, this.access_token);
 
         mTextMessage = (TextView) findViewById(R.id.message);
+        no_surveys = (TextView) findViewById(R.id.no_surveys);
+        no_surveys.setVisibility(View.INVISIBLE);
+
         mAboutUs = (TextView) findViewById(R.id.about_us);
         new_survey_list = (ListView) findViewById(R.id.new_surveys);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -117,6 +120,7 @@ public class Home extends AppCompatActivity {
             @Override public void onRefresh() {
                 if (isNetworkAvailable(getApplicationContext())) {
                     new RequestRawJSON(USER_SURVEYS_URL+"?facebook_id="+access_token).execute();
+                    Log.d(TAG, USER_SURVEYS_URL+"?facebook_id="+access_token);
                 } else {
                     Intent no_internet = new Intent(getApplicationContext(), NoInternet.class);
                     no_internet.putExtra("activity", "pro.ambrose.www.tal_surveys.Home");
@@ -127,6 +131,7 @@ public class Home extends AppCompatActivity {
 
         if (isNetworkAvailable(this)) {
             new RequestRawJSON(USER_SURVEYS_URL+"?facebook_id="+this.access_token).execute();
+            Log.d(TAG, USER_SURVEYS_URL+"?facebook_id="+access_token);
         } else {
             Intent no_internet = new Intent(getApplicationContext(), NoInternet.class);
             no_internet.putExtra("activity", "pro.ambrose.www.tal_surveys.Home");
@@ -166,11 +171,17 @@ public class Home extends AppCompatActivity {
             finish();
         }
 
+        Log.d(TAG, rawJSON);
+
         if (rawJSON != null) {
             JSONArray array = new JSONArray(rawJSON);
+            if (array.length() == 0) {
+                no_surveys.setVisibility(View.VISIBLE);
+            }
             for (int i = 0; i < array.length(); i++) {
 
-                JSONObject survey = array.getJSONObject(i).getJSONObject("survey");
+                // JSONObject survey = array.getJSONObject(i).getJSONObject("survey");
+                JSONObject survey = array.getJSONObject(i);
 
                 new_suvey_data.add(new NewSurveyModel(
                         survey.getInt("id"),

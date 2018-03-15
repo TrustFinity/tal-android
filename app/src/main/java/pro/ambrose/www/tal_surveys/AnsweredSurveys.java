@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.facebook.Profile;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -37,6 +38,7 @@ public class AnsweredSurveys extends AppCompatActivity {
     private GoogleSignInAccount account;
     private Profile profile;
     private String access_token;
+    private TextView no_surveys;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,9 @@ public class AnsweredSurveys extends AppCompatActivity {
         }
 
         Log.d(TAG, this.access_token);
+
+        no_surveys = (TextView) findViewById(R.id.no_surveys);
+        no_surveys.setVisibility(View.INVISIBLE);
 
         mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) findViewById(R.id.main_swipe);
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
@@ -96,16 +101,25 @@ public class AnsweredSurveys extends AppCompatActivity {
             finish();
         }
 
-        JSONArray array = new JSONArray(rawJSON);
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject survey = array.getJSONObject(i).getJSONObject("survey");
+        if (rawJSON != null){
+            JSONArray array = new JSONArray(rawJSON);
 
-            new_suvey_data.add(new NewSurveyModel(
-                    survey.getInt("id"),
-                    12,
-                    survey.getString("name"),
-                    survey.getString("description"),
-                    "What is your name?"));
+            if (array.length() == 0) {
+                no_surveys.setVisibility(View.VISIBLE);
+            }
+
+            for (int i = 0; i < array.length(); i++) {
+
+                // JSONObject survey = array.getJSONObject(i).getJSONObject("survey");
+                JSONObject survey = array.getJSONObject(i);
+
+                new_suvey_data.add(new NewSurveyModel(
+                        survey.getInt("id"),
+                        12,
+                        survey.getString("name"),
+                        survey.getString("description"),
+                        "What is your name?"));
+            }
         }
         new_survey_list.setAdapter(new NewSurveysAdapter(new_suvey_data, getApplicationContext()));
     }

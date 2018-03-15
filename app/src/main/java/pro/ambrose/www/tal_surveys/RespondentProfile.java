@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -117,6 +116,15 @@ public class RespondentProfile extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
         new GetUserData(GET_DATA_URL + access_token).execute();
+        if (names.getText().length() == 0) {
+            if (profile != null) {
+                names.setText(profile.getName());
+            }
+
+            if (account != null){
+                names.setText(account.getDisplayName());
+            }
+        }
     }
 
     @Override
